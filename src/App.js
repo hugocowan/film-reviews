@@ -5,63 +5,120 @@ class App extends React.Component {
 
     state = {
         films: [],
-        genres: []
+        filmCount: 0,
+        genres: [],
+        isSearching: false,
     };
-
-    // Cancel token for cancelling previous requests that could overload the client/trigger rate limiting
-    _source = axios.CancelToken.source();
 
 
     async componentDidMount() {
 
         // Get initial film data for when the page loads.
-        let [ films, genres ] = await Promise.all([
-            axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_KEY_V3}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`, {
-                cancelToken: this._source.token
-            }),
-            axios.get(`https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=${process.env.REACT_APP_KEY_V3}`, {
-                cancelToken: this._source.token
-            })
+        const [ films, genres ] = await Promise.all([
+            axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_KEY_V3}` +
+                      `&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`),
+            axios.get(`https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=${process.env.REACT_APP_KEY_V3}`)
         ]);
 
-        [ films, genres ] = this.prepareData(films.data.results, genres.data.genres);
-
-        this.setState({ films, genres });
+        this.setState({ ...this.prepareData(films, genres) });
     }
 
 
     // Prepare data for rendering
     prepareData = (films, genres) => {
 
-        genres = genres.reduce((object, genre) => {
-            object[genre.id] = genre.name;
-            return object;
-        }, {});
+        // Check if genres needs processing.
+        if ('status' in genres) {
 
-        for (let i = 0; i < films.length - 1; i++) {
+            genres = genres.data.genres.reduce((object, genre) => {
+                object[genre.id] = genre.name;
+                return object;
+            }, {});
+        }
 
-            films[i].genres = films[i].genre_ids.reduce((str, id, i, a) =>
+        for (let i = 0; i < films.data.results.length - 1; i++) {
+
+            films.data.results[i].genres = films.data.results[i].genre_ids.reduce((str, id, i, a) =>
                 i !== a.length - 1 ? str += genres[id] + ' | ' : str += genres[id], '');
         }
 
-        return [ films, genres ];
+        return { films: films.data.results, filmCount: films.data.total_results, genres };
     };
+
+
+    //Search for films matching user input
+    onSearch = ({ target: { value } }) => {
+
+        if (value.length > 2 && this.state.isSearching === false) {
+
+            this.setState({ isSearching: true }, () => {
+
+                axios
+                    .get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_KEY_V3}`+
+                        `&language=en-US&query=${value}&page=1&include_adult=false`)
+                    .then(_films => this.setState({ ...this.prepareData(_films, this.state.genres), isSearching: false }));
+            });
+        }
+    };
+
 
     render() {
 
-        if (this.state.films.length) console.log(this.state.films[0]);
+        // if (this.state.films.length) console.log(this.state.films[0]);
         return (
             <div className="App">
 
-                {this.state.films.map(film =>
-                <div key={film.id} className={'card'}>
-                    <img alt='poster' src={`https://image.tmdb.org/t/p/w185/${film.poster_path}`} />
-                    <h1>{film.title}</h1>
-                    <span className={'rating'}>{film.vote_average}</span>
-                    <p className={'genre'}>{film.genres}</p>
-                    <p>{film.overview}</p>
-                    <p className={'date'}>{film.release_date}</p>
-                </div>)}
+                <nav>
+                    <div className={'nav-item'}>
+                        <h1>Wesley</h1>
+                        <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
+                    </div>
+                    <div className={'nav-item'}>
+                        <h1>Discover</h1>
+                        <img className={'search'} alt='dropdown' src={require('./assets/search-icon-white.png')} />
+                    </div>
+                    <div className={'nav-item underlined'}>
+                        <h1>Watched</h1>
+                        <h2>Movies</h2>
+                        <h2>TV Shows</h2>
+                    </div>
+                    <div className={'nav-item underlined'}>
+                        <h1>Saved</h1>
+                        <h2>Movies</h2>
+                        <h2>TV Shows</h2>
+                    </div>
+                </nav>
+
+                <main>
+                    <p>{this.state.filmCount} movies</p>
+                    {this.state.films.map(film =>
+                    <div key={film.id} className={'card'}>
+                        <div className={'poster'}>
+                            <img
+                                alt='poster'
+                                src={film.poster_path ?
+                                `https://image.tmdb.org/t/p/w185/${film.poster_path}` :
+                                'https://via.placeholder.com/185x278?text=No+Image'}
+                            />
+                        </div>
+                        <div className={'content'}>
+                            <div className={'header'}>
+                                <h1>{film.title}</h1>
+                                <span className={'rating'}>{film.vote_average}</span>
+                                <p className={'genre'}>{film.genres}</p>
+                            </div>
+                            <p>{film.overview}</p>
+                            <p className={'date'}>{film.release_date}</p>
+                        </div>
+                    </div>)}
+                </main>
+
+                <aside>
+                    <div className={'search'}>
+                        <input type={'text'} placeholder={'Search'} onChange={this.onSearch} />
+                        <img alt={'Search'} src={require('./assets/search-icon-yellow.png')} />
+                    </div>
+                </aside>
 
             </div>
         );
