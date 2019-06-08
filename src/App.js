@@ -63,6 +63,10 @@ class App extends React.Component {
         }
     };
 
+    onFilter = ({ target: { value, name } }) => {
+        console.log('hey', value, name);
+    };
+
 
     render() {
 
@@ -133,41 +137,97 @@ class App extends React.Component {
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterGenre && <div className={'vertical bar'} />}
                         <div className={'button-container'}>
-                            <a onClick={() => this.setState({ hideFilterGenre: !this.state.hideFilterGenre })}>Select Genre(s)</a>
+                            <button onClick={() => this.setState({ hideFilterGenre: !this.state.hideFilterGenre })}>Select Genre(s)</button>
                         </div>
                         {!this.state.hideFilterGenre && <ul>
-                            <li>Action</li>
-                            <li>Adventure</li>
-                            <li>Animation</li>
-                            <li>Comedy</li>
-                            <li>Crime Film</li>
-                            <li>Documentary</li>
-                            <li>Drama</li>
-                            <li>Erotic</li>
-                            <li>Family</li>
-                            <li>Fantasy</li>
-                            <li>History</li>
-                            <li>Horror</li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Action'} value='Action' onChange={this.onFilter} />
+                                <label htmlFor={'Action'}/>
+                                Action
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Adventure'} value='Adventure' onChange={this.onFilter} />
+                                <label htmlFor={'Adventure'}/>
+                                Adventure
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Animation'} value='Animation' onChange={this.onFilter} />
+                                <label htmlFor={'Animation'}/>
+                                Animation
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Comedy'} value='Comedy' onChange={this.onFilter} />
+                                <label htmlFor={'Comedy'}/>
+                                Comedy
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Crime'} value='Crime' onChange={this.onFilter} />
+                                <label htmlFor={'Crime'}/>
+                                Crime Film
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Documentary'} value='Documentary' onChange={this.onFilter} />
+                                <label htmlFor={'Documentary'}/>
+                                Documentary
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Drama'} value='Drama' onChange={this.onFilter} />
+                                <label htmlFor={'Drama'}/>
+                                Drama
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Erotic'} value='Erotic' onChange={this.onFilter} />
+                                <label htmlFor={'Erotic'}/>
+                                Erotic
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Family'} value='Family' onChange={this.onFilter} />
+                                <label htmlFor={'Family'}/>
+                                Family
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Fantasy'} value='Fantasy' onChange={this.onFilter} />
+                                <label htmlFor={'Fantasy'}/>
+                                Fantasy
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'History'} value='History' onChange={this.onFilter} />
+                                <label htmlFor={'History'}/>
+                                History
+                            </li>
+                            <li>
+                                <input type={'checkbox'} name={'genre'} id={'Horror'} value='Horror' onChange={this.onFilter} />
+                                <label htmlFor={'Horror'}/>
+                                Horror
+                            </li>
                         </ul>}
                     </div>
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterVote && <div className={'vertical bar'} />}
                         <div className={'button-container'}>
-                            <a onClick={() => this.setState({ hideFilterVote: !this.state.hideFilterVote })}>Select min. vote</a>
+                            <button onClick={() => this.setState({ hideFilterVote: !this.state.hideFilterVote })}>Select min. vote</button>
                         </div>
                         {!this.state.hideFilterVote && <ul>
-                            <li>Label</li>
+                            <li>
+                                <input type={'checkbox'} name={'vote'} id={'Label'} value='Label' onChange={this.onFilter} />
+                                <label htmlFor={'Label'}/>
+                                Label
+                            </li>
                         </ul>}
                     </div>
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterLanguage && <div className={'vertical bar'} />}
                         <div className={'button-container'}>
-                            <a onClick={() => this.setState({ hideFilterLanguage: !this.state.hideFilterLanguage })}>Select language</a>
+                            <button onClick={() => this.setState({ hideFilterLanguage: !this.state.hideFilterLanguage })}>Select language</button>
                         </div>
                         {!this.state.hideFilterLanguage && <ul>
-                            <li>Label</li>
+                            <li>
+                                <input type='checkbox' name={'language'} value='label' id='label' onChange={this.onFilter} />
+                                <label htmlFor={'label'}/>
+                                label
+                            </li>
                         </ul>}
                     </div>
                 </div>

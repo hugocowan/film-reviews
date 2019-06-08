@@ -156,6 +156,7 @@ aside {
     position: fixed;
     height: 100vh;
     margin: 0 45px 0 0;
+    max-width: 480px;
 
     >div {
         background: white;
@@ -202,25 +203,73 @@ aside {
             display: flex;
             flex-flow: row wrap;
             user-select: none;
+            margin: -12px;
 
             .button-container {
                 width: 100%;
-            }
 
-            a {
-                @extend h2;
-                padding: 15px 35px;
-                display: inline-block;
-
-                &:hover {
+                button {
+                    @extend h2;
+                    display: inline-block;
+                    font-family: inherit;
+                    text-align: inherit;
+                    padding: 15px 35px;
+                    background: none;
+                    color: inherit;
+                    border: none;
                     cursor: pointer;
+                    outline: inherit;
                 }
             }
 
+
             ul {
+                padding: 0;
+                font-size: 20px;
+                margin: 0 0 2px;
 
                 li {
-                    margin: 5px 0;
+                    margin: 15px 0;
+                    display: flex;
+                }
+
+                input {
+                    display: none;
+                }
+
+                label {
+                    cursor: pointer;
+                    position: relative;
+                    width: 18px;
+                    height: 18px;
+                    left: 1px;
+                    border:1px solid #001E2D;
+                    margin: 0 15px 0 0;
+                    border-radius: 4px;
+
+                    &:after {
+                        opacity: 0;
+                        content: '';
+                        position: absolute;
+                        width: 9px;
+                        height: 4px;
+                        background: transparent;
+                        top: 4px;
+                        left: 4px;
+                        border: 2px solid #333;
+                        border-top: none;
+                        border-right: none;
+                        transform: rotate(-45deg);
+                    }
+
+                    &:hover::after {
+                        opacity: 0.5;
+                    }
+
+                }
+
+                input[type=checkbox]:checked + label:after {
+                    opacity: 1;
                 }
             }
 
