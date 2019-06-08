@@ -10,7 +10,6 @@ class App extends React.Component {
         isSearching: false,
     };
 
-
     async componentDidMount() {
 
         // Get initial film data for when the page loads.
@@ -28,7 +27,7 @@ class App extends React.Component {
     prepareData = (films, genres) => {
 
         // Check if genres needs processing.
-        if ('status' in genres) {
+        if (genres.hasOwnProperty('status')) {
 
             genres = genres.data.genres.reduce((object, genre) => {
                 object[genre.id] = genre.name;
@@ -46,10 +45,10 @@ class App extends React.Component {
     };
 
 
-    //Search for films matching user input
+    //Search for films matching user input. This is in desperate need of rate throttling/debouncing.
     onSearch = ({ target: { value } }) => {
 
-        if (value.length > 2 && this.state.isSearching === false) {
+        if (this.state.isSearching === false) {
 
             this.setState({ isSearching: true }, () => {
 
@@ -64,64 +63,108 @@ class App extends React.Component {
 
     render() {
 
-        // if (this.state.films.length) console.log(this.state.films[0]);
-        return (
-            <div className="App">
+        // if (this.state.films.length) console.log(this.state.genres);
+        return <div className="App">
 
-                <nav>
-                    <div className={'nav-item'}>
-                        <h1>Wesley</h1>
-                        <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
-                    </div>
-                    <div className={'nav-item'}>
-                        <h1>Discover</h1>
-                        <img className={'search'} alt='dropdown' src={require('./assets/search-icon-white.png')} />
-                    </div>
-                    <div className={'nav-item underlined'}>
-                        <h1>Watched</h1>
-                        <h2>Movies</h2>
-                        <h2>TV Shows</h2>
-                    </div>
-                    <div className={'nav-item underlined'}>
-                        <h1>Saved</h1>
-                        <h2>Movies</h2>
-                        <h2>TV Shows</h2>
-                    </div>
-                </nav>
+            <nav>
+                <div className={'nav-item'}>
+                    <h1>Wesley</h1>
+                    <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
+                </div>
+                <div className={'nav-item'}>
+                    <h1>Discover</h1>
+                    <img className={'search'} alt='dropdown' src={require('./assets/search-icon-white.png')} />
+                </div>
+                <div className={'nav-item title'}>
+                    <h1>Watched</h1>
+                </div>
+                <div className={'nav-item small'}>
+                    <h2>Movies</h2>
+                </div>
+                <div className={'nav-item small'}>
+                    <h2>TV Shows</h2>
+                </div>
+                <div className={'nav-item title'}>
+                    <h1>Saved</h1>
+                </div>
+                <div className={'nav-item small'}>
+                    <h2>Movies</h2>
+                </div>
+                <div className={'nav-item small'}>
+                    <h2>TV Shows</h2>
+                </div>
+            </nav>
 
-                <main>
-                    <p>{this.state.filmCount} movies</p>
-                    {this.state.films.map(film =>
-                    <div key={film.id} className={'card'}>
-                        <div className={'poster'}>
-                            <img
-                                alt='poster'
-                                src={film.poster_path ?
-                                `https://image.tmdb.org/t/p/w185/${film.poster_path}` :
-                                'https://via.placeholder.com/185x278?text=No+Image'}
-                            />
+            <main>
+                <p>{this.state.filmCount} movies</p>
+                {this.state.films.map(film =>
+                <div key={film.id} className={'card'}>
+                    <div className={'poster'}>
+                        <img
+                            alt='poster'
+                            src={film.poster_path ?
+                            `https://image.tmdb.org/t/p/w185/${film.poster_path}` :
+                            'https://via.placeholder.com/185x278?text=No+Image'}
+                        />
+                    </div>
+                    <div className={'content'}>
+                        <div className={'header'}>
+                            <h1>{film.title}</h1>
+                            <span className={'rating'}>{film.vote_average}</span>
+                            <p className={'genre'}>{film.genres}</p>
                         </div>
-                        <div className={'content'}>
-                            <div className={'header'}>
-                                <h1>{film.title}</h1>
-                                <span className={'rating'}>{film.vote_average}</span>
-                                <p className={'genre'}>{film.genres}</p>
-                            </div>
-                            <p>{film.overview}</p>
-                            <p className={'date'}>{film.release_date}</p>
-                        </div>
-                    </div>)}
-                </main>
-
-                <aside>
-                    <div className={'search'}>
-                        <input type={'text'} placeholder={'Search'} onChange={this.onSearch} />
-                        <img alt={'Search'} src={require('./assets/search-icon-yellow.png')} />
+                        <p>{film.overview}</p>
+                        <p className={'date'}>{film.release_date}</p>
                     </div>
-                </aside>
+                </div>)}
+            </main>
 
-            </div>
-        );
+            <aside>
+                <div>
+                    <input type={'text'} className={'search'} placeholder={'Search'} onChange={this.onSearch} />
+                    <input type={'text'} className={'date'} placeholder={'Year of Release'} onChange={this.onSearch} />
+                </div>
+                <div>
+                    <h1>Movie</h1>
+                    <div className={'collapsible'}>
+                        <div className={'horizontal bar'} />
+                        <div className={'Vertical bar'} />
+                        <h2>Select Genre(s)</h2>
+                        <ul>
+                            <li>Action</li>
+                            <li>Adventure</li>
+                            <li>Animation</li>
+                            <li>Comedy</li>
+                            <li>Crime Film</li>
+                            <li>Documentary</li>
+                            <li>Drama</li>
+                            <li>Erotic</li>
+                            <li>Family</li>
+                            <li>Fantasy</li>
+                            <li>History</li>
+                            <li>Horror</li>
+                        </ul>
+                    </div>
+                    <div className={'collapsible'}>
+                        <div className={'horizontal bar'} />
+                        <div className={'Vertical bar'} />
+                        <h2>Select min. vote</h2>
+                        <ul>
+                            <li>Label</li>
+                        </ul>
+                    </div>
+                    <div className={'collapsible'}>
+                        <div className={'horizontal bar'} />
+                        <div className={'Vertical bar'} />
+                        <h2>Select language</h2>
+                        <ul>
+                            <li>Label</li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+        </div>;
     }
 }
 
