@@ -110,11 +110,13 @@ main {
         .content {
             display: flex;
             flex-flow: row wrap;
+            width: 100%;
 
             .header {
                 display: flex;
                 flex-flow: row wrap;
                 justify-content: space-between;
+                width: 100%;
 
                 h1 {
                     width: 80%;
@@ -131,6 +133,7 @@ main {
 
                 .genre {
                     color: #D9E021;
+                    width: 100%;
                 }
 
             }
@@ -196,22 +199,46 @@ aside {
 
         .collapsible {
             width: 100%;
+            display: flex;
+            flex-flow: row wrap;
+            user-select: none;
 
-            h2 {
-                padding: 15px 80px;
+            .button-container {
+                width: 100%;
             }
 
-            li {
-                margin: 5px 0;
+            a {
+                @extend h2;
+                padding: 15px 35px;
+                display: inline-block;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
 
-            &:before {
-                width: 0;
-                height: 0;
-                border-top: 140px solid #20a3bf;
-                border-left: 70px solid transparent;
-                border-right: 70px solid transparent;
+            ul {
+
+                li {
+                    margin: 5px 0;
+                }
             }
+
+            .bar {
+                position: relative;
+                background: #001E2D;
+                width: 2px;
+                height: 18px;
+                top: 36px;
+                left: 8px;
+
+                &.horizontal {
+                    transform: rotate(90deg);
+                    top: 36px;
+                    left: 10px;
+                }
+            }
+
         }
     }
 

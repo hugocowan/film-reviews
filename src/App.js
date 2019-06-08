@@ -8,6 +8,9 @@ class App extends React.Component {
         filmCount: 0,
         genres: [],
         isSearching: false,
+        hideFilterVote: true,
+        hideFilterGenre: false,
+        hideFilterLanguage: true,
     };
 
     async componentDidMount() {
@@ -128,9 +131,11 @@ class App extends React.Component {
                     <h1>Movie</h1>
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
-                        <div className={'Vertical bar'} />
-                        <h2>Select Genre(s)</h2>
-                        <ul>
+                        {this.state.hideFilterGenre && <div className={'vertical bar'} />}
+                        <div className={'button-container'}>
+                            <a onClick={() => this.setState({ hideFilterGenre: !this.state.hideFilterGenre })}>Select Genre(s)</a>
+                        </div>
+                        {!this.state.hideFilterGenre && <ul>
                             <li>Action</li>
                             <li>Adventure</li>
                             <li>Animation</li>
@@ -143,23 +148,27 @@ class App extends React.Component {
                             <li>Fantasy</li>
                             <li>History</li>
                             <li>Horror</li>
-                        </ul>
+                        </ul>}
                     </div>
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
-                        <div className={'Vertical bar'} />
-                        <h2>Select min. vote</h2>
-                        <ul>
+                        {this.state.hideFilterVote && <div className={'vertical bar'} />}
+                        <div className={'button-container'}>
+                            <a onClick={() => this.setState({ hideFilterVote: !this.state.hideFilterVote })}>Select min. vote</a>
+                        </div>
+                        {!this.state.hideFilterVote && <ul>
                             <li>Label</li>
-                        </ul>
+                        </ul>}
                     </div>
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
-                        <div className={'Vertical bar'} />
-                        <h2>Select language</h2>
-                        <ul>
+                        {this.state.hideFilterLanguage && <div className={'vertical bar'} />}
+                        <div className={'button-container'}>
+                            <a onClick={() => this.setState({ hideFilterLanguage: !this.state.hideFilterLanguage })}>Select language</a>
+                        </div>
+                        {!this.state.hideFilterLanguage && <ul>
                             <li>Label</li>
-                        </ul>
+                        </ul>}
                     </div>
                 </div>
             </aside>
