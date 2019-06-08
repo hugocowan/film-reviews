@@ -83,7 +83,11 @@ nav {
 // Main
 
 main {
-    margin: 67px 305px 0;
+
+    width: 1380px;
+    position: relative;
+    left: 305px;
+    top: 68px;
 
     >p {
         margin: 0 0 15px;
@@ -92,7 +96,7 @@ main {
     .card {
 
         background: #FFFFFF;
-        width: 600px;
+        width: 100%;
         display: flex;
         margin: 0 0 15px;
         padding: 20px;
@@ -151,12 +155,11 @@ main {
 // Sidebar
 
 aside {
-    left: 960px;
+    right: 45px;
     top: 99px;
     position: fixed;
     height: 100vh;
-    margin: 0 45px 0 0;
-    max-width: 480px;
+    width: 480px;
 
     >div {
         background: white;

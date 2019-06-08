@@ -15,6 +15,9 @@ class App extends React.Component {
 
     async componentDidMount() {
 
+        this.onWindowResize();
+        window.addEventListener("resize", this.onWindowResize);
+
         // Get initial film data for when the page loads.
         const [ films, genres ] = await Promise.all([
             axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_KEY_V3}` +
@@ -67,6 +70,9 @@ class App extends React.Component {
         console.log('hey', value, name);
     };
 
+    onWindowResize = () => {
+        this._main.style.width = window.innerWidth - 885 + 'px';
+    };
 
     render() {
 
@@ -102,7 +108,7 @@ class App extends React.Component {
                 </div>
             </nav>
 
-            <main>
+            <main ref={(el) => this._main = el}>
                 <p>{this.state.filmCount} movies</p>
                 {this.state.films.map(film =>
                 <div key={film.id} className={'card'}>
