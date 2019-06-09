@@ -5,12 +5,13 @@ class App extends React.Component {
 
     state = {
         films: [],
-        filmCount: 0,
         genres: [],
+        filmCount: 0,
         isSearching: false,
         hideFilterVote: true,
         hideFilterGenre: false,
         hideFilterLanguage: true,
+        hideNav: true,
     };
 
     async componentDidMount() {
@@ -66,12 +67,23 @@ class App extends React.Component {
         }
     };
 
-    onFilter = ({ target: { value, name } }) => {
-        console.log('hey', value, name);
+    onFilter = ({ target: { name, value } }) => {
+        console.log(name, ':', value);
     };
 
     onWindowResize = () => {
-        this._main.style.width = window.innerWidth - 885 + 'px';
+
+        const width = window.innerWidth;
+
+        if (width < 1440) {
+
+            this._main.style.width = window.innerWidth - 425 + 'px';
+
+        } else {
+
+            this._main.style.width = window.innerWidth - 885 + 'px';
+        }
+
     };
 
     render() {
@@ -79,12 +91,19 @@ class App extends React.Component {
         // if (this.state.films.length) console.log(this.state.genres);
         return <div className="App">
 
-            <nav>
+            <div className={'burger'} onClick={() => this.setState({ hideNav: !!this.state.hideNav })}>
+                <div />
+                <div />
+                <div />
+            </div>
+
+            <nav className={'content ' + this.state.hideNav}>
+
                 <div className={'nav-item'}>
                     <h1>Wesley</h1>
                     <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
                 </div>
-                <div className={'nav-item'}>
+                <div className={'nav-item active'}>
                     <h1>Discover</h1>
                     <img className={'search'} alt='dropdown' src={require('./assets/search-icon-white.png')} />
                 </div>
@@ -108,7 +127,7 @@ class App extends React.Component {
                 </div>
             </nav>
 
-            <main ref={(el) => this._main = el}>
+            <main ref={(el) => this._main = el} className={`${this.state.hideNav}`}>
                 <p>{this.state.filmCount} movies</p>
                 {this.state.films.map(film =>
                 <div key={film.id} className={'card'}>

@@ -21,6 +21,26 @@ h2 {
     font-size: 20px;
 }
 
+// Burger
+
+.burger {
+    cursor: pointer;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+
+    div {
+        width: 3px;
+        height: 30px;
+        left: 30px;
+        position: relative;
+        background: #001E2D;
+        transform: rotate(90deg);
+        margin: 0 0 -20px;
+        border-radius: 3px;
+    }
+}
+
 
 // Nav
 
@@ -32,6 +52,11 @@ nav {
     margin: 0;
     top: 0;
     color: #FFFFFF;
+    display: none;
+
+    @media(min-width: 1440px) {
+        display: block;
+    }
 
     .nav-item {
         display: flex;
@@ -41,7 +66,7 @@ nav {
         padding : 35px;
 
         &:hover {
-            background: #D9E021;
+            background: darken(#D9E021, 50%);
             cursor: pointer;
         }
 
@@ -53,6 +78,10 @@ nav {
         .search {
             width: 27px;
             height: 28px;
+        }
+
+        &.active {
+            background: #D9E021;
         }
 
         &.title {
@@ -88,6 +117,16 @@ main {
     position: relative;
     left: 305px;
     top: 68px;
+
+    &.true {
+        left: 45px;
+    }
+
+    @media(min-width: 1440px) {
+        &.true {
+            left: 305px;
+        }
+    }
 
     >p {
         margin: 0 0 15px;
@@ -159,7 +198,11 @@ aside {
     top: 99px;
     position: fixed;
     height: 100vh;
-    width: 480px;
+    width: 280px;
+
+    @media(min-width: 1440px) {
+        width: 480px;
+    }
 
     >div {
         background: white;
