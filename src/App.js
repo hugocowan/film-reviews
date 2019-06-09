@@ -58,7 +58,7 @@ class App extends React.Component {
     };
 
 
-    //Search for films matching user input. This is in desperate need of rate throttling/debouncing.
+    //Search for films matching user input.
     onSearch = ({ target: { value } }) => {
 
         if (this.state.isSearching === false) {
@@ -68,7 +68,16 @@ class App extends React.Component {
                 axios
                     .get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_KEY_V3}`+
                         `&language=en-US&query=${value}&page=1&include_adult=false`)
-                    .then(_films => this.setState({ ...this.prepareData(_films, this.state.genres), isSearching: false }));
+                    .then(_films => {
+
+                        this.setState({ ...this.prepareData(_films, this.state.genres) });
+
+                        // This prevents another request being made straight away.
+                        setTimeout(() => {
+                            this.setState({ isSearching: false });
+                        }, 1000);
+
+                    });
             });
         }
     };
