@@ -43,9 +43,15 @@ class App extends React.Component {
         }
 
         for (let i = 0; i < films.data.results.length - 1; i++) {
+            const film = films.data.results[i];
 
-            films.data.results[i].genres = films.data.results[i].genre_ids.reduce((str, id, i, a) =>
+            // Give genres actual names instead of ids.
+            film.genres = film.genre_ids.reduce((str, id, i, a) =>
                 i !== a.length - 1 ? str += genres[id] + ' | ' : str += genres[id], '');
+
+            // Provide a shorter version of the film's overview
+            film.shortText = film.overview.length > 160 ? film.overview.slice(0, 142) : film.overview;
+            film.endShortText = film.overview.length > 160 ? film.overview.slice(142, 160) : film.overview;
         }
 
         return { films: films.data.results, filmCount: films.data.total_results, genres };
@@ -72,7 +78,7 @@ class App extends React.Component {
     };
 
     // Resize main element (containing the film cards) depending on screen width.
-    // The card padding adds 40px onto their width, so we have to compensate for that.
+    // Also shorten text if screen width < 768px.
     onWindowResize = () => {
 
         const width = window.innerWidth;
@@ -90,9 +96,31 @@ class App extends React.Component {
             this._main.style.width = window.innerWidth - 885 + 'px';
 
             // This ensures the menu resets if resizing multiple times.
-            this.setState({ hideNav: true });
+            if (this.state.hideNav) this.setState({ hideNav: true });
         }
 
+
+        if (width < 768) {
+
+            if (!this.state.shortText) this.setState({ shortText: true });
+
+        } else {
+
+            if (this.state.shortText) this.setState({ shortText: false });
+
+        }
+
+    };
+
+    renderBurger = (name, page) => {
+        return <div className={`burger ${name ? name : ''} ${this.state.hideNav}`} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
+            <div />
+            <div />
+            <div />
+
+            {/* This is hardcoded in the render html, would be good to save which tab the user is on so this can be dynamic. */}
+            {page && <h1>{page}</h1>}
+        </div>
     };
 
     render() {
@@ -100,25 +128,11 @@ class App extends React.Component {
         // if (this.state.films.length) console.log(this.state.genres);
         return <div className="App">
 
-            <div className={'burger ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
-                <div />
-                <div />
-                <div />
-
-                {/* This is hardcoded now, would be good to save which tab the user is on so this can be dynamic. */}
-                <h1>Discover</h1>
-            </div>
+            {this.renderBurger('', 'Discover')}
 
             <div className={'mobile-nav'}>
 
-                <div className={'burger ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
-                    <div />
-                    <div />
-                    <div />
-
-                    {/* This is hardcoded now, would be good to save which tab the user is on so this can be dynamic. */}
-                    <h1>Discover</h1>
-                </div>
+                {this.renderBurger('', 'Discover')}
 
                 <input type={'text'} placeholder={'Search for movies'} onChange={this.onSearch} />
 
@@ -134,11 +148,7 @@ class App extends React.Component {
                 <div className={'nav-item'}>
                     <h1>Wesley</h1>
                     <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
-                    <div className={'burger white ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
-                        <div />
-                        <div />
-                        <div />
-                    </div>
+                    {this.renderBurger('white')}
                 </div>
 
                 <div className={'nav-item active'}>
@@ -187,7 +197,11 @@ class App extends React.Component {
                             <span className={'rating'}>{film.vote_average}</span>
                             <p className={'genre'}>{film.genres}</p>
                         </div>
-                        <p>{film.overview}</p>
+                        {!this.state.shortText && <p className={'overview'}>{film.overview}</p>}
+                        {this.state.shortText && <p className={'overview small'}>
+                            {film.shortText}
+                            <span>{film.endShortText}</span>
+                        </p>}
                         <p className={'date'}>{film.release_date}</p>
                     </div>
                 </div>)}
