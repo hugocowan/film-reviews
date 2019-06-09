@@ -72,11 +72,16 @@ class App extends React.Component {
     };
 
     // Resize main element (containing the film cards) depending on screen width.
+    // The card padding adds 40px onto their width, so we have to compensate for that.
     onWindowResize = () => {
 
         const width = window.innerWidth;
 
-        if (width < 1440) {
+        if (width < 1024) {
+
+            this._main.style.width = window.innerWidth - 90 + 'px';
+
+        } else if (width < 1440) {
 
             this._main.style.width = window.innerWidth - 425 + 'px';
 
@@ -99,7 +104,30 @@ class App extends React.Component {
                 <div />
                 <div />
                 <div />
+
+                {/* This is hardcoded now, would be good to save which tab the user is on so this can be dynamic. */}
+                <h1>Discover</h1>
             </div>
+
+            <div className={'mobile-nav'}>
+
+                <div className={'burger ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
+                    <div />
+                    <div />
+                    <div />
+
+                    {/* This is hardcoded now, would be good to save which tab the user is on so this can be dynamic. */}
+                    <h1>Discover</h1>
+                </div>
+
+                <input type={'text'} placeholder={'Search for movies'} onChange={this.onSearch} />
+
+                <div>
+                    <img alt='calendar' src={require('./assets/year-icon.png')} />
+                </div>
+
+            </div>
+
 
             <nav className={'content ' + this.state.hideNav}>
 
@@ -112,6 +140,7 @@ class App extends React.Component {
                         <div />
                     </div>
                 </div>
+
                 <div className={'nav-item active'}>
                     <h1>Discover</h1>
                     <img className={'search'} alt='dropdown' src={require('./assets/search-icon-white.png')} />
@@ -134,10 +163,14 @@ class App extends React.Component {
                 <div className={'nav-item small'}>
                     <h2>TV Shows</h2>
                 </div>
+
             </nav>
 
+
             <main ref={(el) => this._main = el} className={`${this.state.hideNav}`}>
+
                 <p>{this.state.filmCount} movies</p>
+
                 {this.state.films.map(film =>
                 <div key={film.id} className={'card'}>
                     <div className={'poster'}>
@@ -158,18 +191,23 @@ class App extends React.Component {
                         <p className={'date'}>{film.release_date}</p>
                     </div>
                 </div>)}
+
             </main>
 
 
             {/* It would be good to dynamically get these genres and languages, so that they are always up to date.
                 It might not look exactly like the mockup though. */}
             <aside>
+
                 <div>
-                    <input type={'text'} className={'search'} placeholder={'Search'} onChange={this.onSearch} />
+                    <input type={'text'} className={'search'} placeholder={'Search for movies'} onChange={this.onSearch} />
                     <input type={'text'} className={'date'} placeholder={'Year of Release'} onChange={this.onSearch} />
                 </div>
+
                 <div>
+
                     <h1>Movie</h1>
+
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterGenre && <div className={'vertical bar'} />}
@@ -239,6 +277,7 @@ class App extends React.Component {
                             </li>
                         </ul>}
                     </div>
+
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterVote && <div className={'vertical bar'} />}
@@ -253,6 +292,7 @@ class App extends React.Component {
                             </li>
                         </ul>}
                     </div>
+
                     <div className={'collapsible'}>
                         <div className={'horizontal bar'} />
                         {this.state.hideFilterLanguage && <div className={'vertical bar'} />}
@@ -267,8 +307,11 @@ class App extends React.Component {
                             </li>
                         </ul>}
                     </div>
+
                 </div>
+
             </aside>
+
 
         </div>;
     }

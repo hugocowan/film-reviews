@@ -21,14 +21,17 @@ h2 {
     font-size: 20px;
 }
 
+
 // Burger
 
 .burger {
     cursor: pointer;
     position: absolute;
-    display: inline-block;
+    display: none;
     width: 50px;
     height: 50px;
+    top: 20px;
+    left: 25px;
 
 
     &.false {
@@ -38,10 +41,16 @@ h2 {
     &.white {
         display: inline-block;
         position: relative;
+        top: unset;
+        left: unset;
 
         div {
             background: #F6F7F9;
         }
+    }
+
+    @media (min-width: 1024px) {
+        display: inline-block;
     }
 
     @media (min-width: 1440px) {
@@ -50,7 +59,7 @@ h2 {
 
     div {
         width: 3px;
-        height: 30px;
+        height: 29px;
         left: 30px;
         position: relative;
         background: #001E2D;
@@ -58,27 +67,106 @@ h2 {
         margin: 0 0 -20px;
         border-radius: 3px;
     }
+
+    h1 {
+        position: relative;
+        left: 75px;
+        bottom: 20px;
+        font-size: 28px;
+    }
+}
+
+
+// Mobile Nav
+
+.mobile-nav {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 25px 40px;
+    color: #FFFFFF;
+    height: 120px;
+    top: 80px;
+
+    input, div {
+        border: #D9E021 solid 2px;
+        border-style: none none solid none;
+    }
+
+    input {
+        color: #D9E021;
+        padding: 12px 0 12px 50px;
+        margin-right: 15px;
+        box-sizing: border-box;
+        font-size: 24px;
+        flex-grow: 1;
+        background: #F6F7F9 url('./assets/search-icon-yellow.png') left no-repeat;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::placeholder {
+            color: #D9E021;
+        }
+    }
+
+    div {
+        height: 52px;
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 32px;
+            height: 29px;
+            cursor: pointer;
+        }
+    }
+
+    .burger {
+        @extend .burger;
+        display: inline-block;
+        color: #001E2D;
+        border: none;
+        bottom: 131px;
+        top: unset;
+        left: -16px;
+
+        div {
+            margin: 0 0 -22px;
+            left: 25px;
+        }
+
+        h1 {
+            bottom: 19px;
+        }
+    }
+
+
+    @media (min-width: 1024px) {
+        display: none;
+    }
+
 }
 
 
 // Nav
 
 nav {
+    top: 0;
+    margin: 0;
+    width: 260px;
+    left: -260px;
+    height: 100vh;
+    color: #FFFFFF;
     position: fixed;
     background: #001E2D;
-    height: 100vh;
-    width: 260px;
-    margin: 0;
-    top: 0;
-    color: #FFFFFF;
-    left: -260px;
     transition: ease-in 0.3s;
-
 
     &.false {
         left: 0;
     }
-
 
     .nav-item {
         display: flex;
@@ -148,19 +236,23 @@ main {
 
     width: 1380px;
     position: relative;
-    left: 305px;
     top: 68px;
     z-index: -1;
+    left: 25px;
 
-    &.true {
-        left: 45px;
+
+    @media (min-width: 1024px) {
+
+        &.true {
+            left: 45px;
+        }
+
+        &.false {
+            left: 45px;
+        }
     }
 
-    &.false {
-        left: 45px;
-    }
-
-    @media(min-width: 1440px) {
+    @media (min-width: 1440px) {
 
         &.false, &.true {
             left: 305px;
@@ -239,8 +331,13 @@ aside {
     position: fixed;
     height: 100vh;
     width: 280px;
+    display: none;
 
-    @media(min-width: 1440px) {
+    @media (min-width: 1024px) {
+        display: block;
+    }
+
+    @media (min-width: 1440px) {
         width: 480px;
     }
 
@@ -266,7 +363,6 @@ aside {
             font-size: 24px;
 
             &.search {
-                font-weight: 600;
                 background: #FFFFFF url('./assets/search-icon-yellow.png') left no-repeat;
             }
 
@@ -281,7 +377,6 @@ aside {
 
         h1, h2 {
             width: 100%;
-
         }
 
         .collapsible {
