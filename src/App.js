@@ -7,11 +7,11 @@ class App extends React.Component {
         films: [],
         genres: [],
         filmCount: 0,
+        hideNav: true,
         isSearching: false,
         hideFilterVote: true,
         hideFilterGenre: false,
         hideFilterLanguage: true,
-        hideNav: true,
     };
 
     async componentDidMount() {
@@ -71,6 +71,7 @@ class App extends React.Component {
         console.log(name, ':', value);
     };
 
+    // Resize main element (containing the film cards) depending on screen width.
     onWindowResize = () => {
 
         const width = window.innerWidth;
@@ -82,6 +83,9 @@ class App extends React.Component {
         } else {
 
             this._main.style.width = window.innerWidth - 885 + 'px';
+
+            // This ensures the menu resets if resizing multiple times.
+            this.setState({ hideNav: true });
         }
 
     };
@@ -91,7 +95,7 @@ class App extends React.Component {
         // if (this.state.films.length) console.log(this.state.genres);
         return <div className="App">
 
-            <div className={'burger'} onClick={() => this.setState({ hideNav: !!this.state.hideNav })}>
+            <div className={'burger ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
                 <div />
                 <div />
                 <div />
@@ -102,6 +106,11 @@ class App extends React.Component {
                 <div className={'nav-item'}>
                     <h1>Wesley</h1>
                     <img className={'dropdown'} alt='dropdown' src={require('./assets/arrow-icon.png')} />
+                    <div className={'burger white ' + this.state.hideNav} onClick={() => this.setState({ hideNav: !this.state.hideNav })}>
+                        <div />
+                        <div />
+                        <div />
+                    </div>
                 </div>
                 <div className={'nav-item active'}>
                     <h1>Discover</h1>
@@ -151,6 +160,9 @@ class App extends React.Component {
                 </div>)}
             </main>
 
+
+            {/* It would be good to dynamically get these genres and languages, so that they are always up to date.
+                It might not look exactly like the mockup though. */}
             <aside>
                 <div>
                     <input type={'text'} className={'search'} placeholder={'Search'} onChange={this.onSearch} />
